@@ -4,4 +4,5 @@
 int main(){
   int caca;
   int zizi;
+  int test;
 }
