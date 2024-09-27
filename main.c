@@ -1,12 +1,33 @@
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <string.h>
 #pragma warning(disable:4996)
 
-int main(){
-  int caca=0;
-  int zizi;
-  int test;
-  if (caca==0){
-      printf("j'aime le zizi ");
-  }
-}
+enum{LONGUEUR_MAX=30 };
+
+typedef struct{
+    char nom[LONGUEUR_MAX];
+    int no_groupe;
+
+}Inscription ;
+
+    int main(){
+        Inscription I;
+        for(int i=1; i<LONGUEUR_MAX;i++){
+            printf("Inscription enregistree:(%d)\n", i);
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+       exit(EXIT_FAILURE); //---------------C0-----------------------
+
+        }
