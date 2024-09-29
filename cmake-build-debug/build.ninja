@@ -61,12 +61,6 @@ build CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj: C_COMPILER__SAE_C_unscanned_Debug
   OBJECT_DIR = CMakeFiles\SAE_C.dir
   OBJECT_FILE_DIR = CMakeFiles\SAE_C.dir
 
-build CMakeFiles/SAE_C.dir/inscription_.c.obj: C_COMPILER__SAE_C_unscanned_Debug C$:/Users/Celthans/CLionProjects/SAE_C/inscription$ .c || cmake_object_order_depends_target_SAE_C
-  DEP_FILE = CMakeFiles\SAE_C.dir\inscription_.c.obj.d
-  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
-  OBJECT_DIR = CMakeFiles\SAE_C.dir
-  OBJECT_FILE_DIR = CMakeFiles\SAE_C.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SAE_C
@@ -75,7 +69,7 @@ build CMakeFiles/SAE_C.dir/inscription_.c.obj: C_COMPILER__SAE_C_unscanned_Debug
 #############################################
 # Link the executable SAE_C.exe
 
-build SAE_C.exe: C_EXECUTABLE_LINKER__SAE_C_Debug CMakeFiles/SAE_C.dir/main.c.obj CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj CMakeFiles/SAE_C.dir/inscription_.c.obj
+build SAE_C.exe: C_EXECUTABLE_LINKER__SAE_C_Debug CMakeFiles/SAE_C.dir/main.c.obj CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\SAE_C.dir
