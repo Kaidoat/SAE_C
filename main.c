@@ -16,6 +16,8 @@ typedef struct{
 Etudiants etudiants[LIMITE];
 
 
+
+
 void inscription(char*nom_etu, int no_groupe ) {
     Etudiants e;
 
@@ -41,13 +43,13 @@ void inscription(char*nom_etu, int no_groupe ) {
 
 
 int main(){
-        Etudiants e;
+    Etudiants e;
     inscription(e.nom_etu, e.no_groupe);
 
 
 
-        exit(EXIT_FAILURE);
-    }
+    exit(EXIT_FAILURE);
+}
 
 
 

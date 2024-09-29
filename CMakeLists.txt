@@ -4,6 +4,6 @@ project(SAE_C C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(SAE_C
-        main.c
         "Brouillon_C1.c"
-        "inscription .h")
+        "inscription .h"
+        main.c)
