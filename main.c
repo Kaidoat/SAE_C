@@ -3,17 +3,17 @@
 #include <string.h>
 #pragma warning(disable:4996)
 
-enum{LONGUEUR_MAX=30 };
+enum{LONGUEUR_MAX=30, LIMITE=100 };
 
 typedef struct{
-    char nom[LONGUEUR_MAX];
+    char nom_ETU[LONGUEUR_MAX];
     int no_groupe;
 
 }Inscription ;
 
     int main(){
         Inscription I;
-        for(int i=1; i<LONGUEUR_MAX;i++){
+        for(int i=1; i<LIMITE+1; i++){
             printf("Inscription enregistree:(%d)\n", i);
 
         }

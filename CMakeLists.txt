@@ -4,4 +4,5 @@ project(SAE_C C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(SAE_C
-        main.c)
+        main.c
+        "Brouillon C1")
