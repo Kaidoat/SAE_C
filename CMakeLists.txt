@@ -5,4 +5,5 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(SAE_C
         main.c
-        "Brouillon C1")
+        "Brouillon_C1.c"
+        "inscription .h")
