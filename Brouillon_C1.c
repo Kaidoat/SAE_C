@@ -28,24 +28,32 @@
 //
 //int nb_absences = 0;
 //
-//// Fonction inscrire un étudiant
-//void inscription(char *nom, int groupe) {
-//    if (nb_etudiants < 100) {
-//        if (!existe_etudiant(nom, groupe)) {
-//            etudiants[nb_etudiants].id = nb_etudiants + 1;
-//            strcpy(etudiants[nb_etudiants].nom, nom);
-//            etudiants[nb_etudiants].groupe = groupe;
-//            etudiants[nb_etudiants].absences = 0;
-//            nb_etudiants++;
-//            printf("Inscription enregistree (%d)\n", nb_etudiants);
-//        }
-//        else {
-//            printf("Nom incorrect\n");
-//        }
-//    }
-//    else {
-//        printf("Erreur : nombre maximum d'étudiants atteint\n");
-//    }
-//}
+// //void inscription(char*nom_etu, int no_groupe ) {
 //
+//     int nb_etudiants=0;
+//
+//
+//     if (nb_etudiants < LIMITE) {
+//         etudiants[LIMITE].id = nb_etudiants + 1;
+//         strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
+//         etudiants[nb_etudiants].no_groupe = no_groupe;
+//         printf("Inscription enregistree (%d)\n", nb_etudiants);
+//         nb_etudiants++;
+//
+//     }
+//     // if (strcmp(nom_etu, no_groupe)) {
+//     //     etudiants[LIMITE].id = nb_etudiants + 1;
+//     //     strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
+//     //     etudiants[nb_etudiants].no_groupe = no_groupe;
+//     //     nb_etudiants++;
+//     //     printf("Inscription enregistree (%d)\n", nb_etudiants);
+//     // }
+//     else  {
+//         printf("Nom incorrect\n");
+//     }
+// }
+// //     else {
+// //         printf("Erreur : nombre maximum d'étudiants atteint\n");
+// //     }
+// // }
 //// existe étduiant a faire ensuite

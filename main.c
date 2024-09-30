@@ -17,40 +17,45 @@ Etudiants etudiants[LIMITE];
 
 
 
-
-void inscription(char*nom_etu, int no_groupe ) {
+void inscription(char*nom_etu, int no_groupe) {
 
     int nb_etudiants=0;
 
+    while (nb_etudiants < LIMITE) {
 
-    if (nb_etudiants < LIMITE) {
-        if (!existe_etudiant(nom_etu, no_groupe)) {
-            etudiants[LIMITE].id = nb_etudiants + 1;
-            strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
-            etudiants[nb_etudiants].no_groupe = no_groupe;
-            nb_etudiants++;
-            printf("Inscription enregistree (%d)\n", nb_etudiants);
-        }
-        else  {
-            printf("Nom incorrect\n");
-        }
+        etudiants[LIMITE].id =  nb_etudiants+1;
+        scanf("%s %d", etudiants[LIMITE].nom_etu, etudiants[LIMITE].no_groupe);
+        strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
+        etudiants[nb_etudiants].no_groupe = no_groupe;
+        nb_etudiants++;
+        printf("Inscription enregistree (%d)\n", nb_etudiants);
     }
-    else {
-        printf("Erreur : nombre maximum d'étudiants atteint\n");
-    }
+
 }
+
+
+//     if (strcmp)  {
+//         printf("Nom incorrect\n");
+//     }
+//
+// if (nb_etudiants ==LIMITE) {
+//     printf("Erreur : nombre maximum d'étudiants atteint\n");
+// }
+// }
+//----------C1------------//
+
 
 
 int main(){
     Etudiants e;
     char input[LONGUEUR_MAX];
-    inscription("LEA", 101);
 
 do{
     scanf("%s",input);
     if (strcmp(input, "inscription")!=0){ //C1
-        inscription("LEA", 101);
+        inscription("Lea", 101);
     }
+
 
 
 
