@@ -19,16 +19,15 @@ Etudiants etudiants[LIMITE];
 
 
 void inscription(char*nom_etu, int no_groupe ) {
-    Etudiants e;
 
     int nb_etudiants=0;
 
 
     if (nb_etudiants < LIMITE) {
-        if (!existe_etudiant(e.nom_etu, e.no_groupe)) {
+        if (!existe_etudiant(nom_etu, no_groupe)) {
             etudiants[LIMITE].id = nb_etudiants + 1;
-            strcpy(etudiants[nb_etudiants].nom_etu, e.nom_etu);
-            etudiants[nb_etudiants].no_groupe = e.no_groupe;
+            strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
+            etudiants[nb_etudiants].no_groupe = no_groupe;
             nb_etudiants++;
             printf("Inscription enregistree (%d)\n", nb_etudiants);
         }
@@ -44,11 +43,22 @@ void inscription(char*nom_etu, int no_groupe ) {
 
 int main(){
     Etudiants e;
-    inscription(e.nom_etu, e.no_groupe);
+    char input[LONGUEUR_MAX];
+    inscription("LEA", 101);
+
+do{
+    scanf("%s",input);
+    if (strcmp(input, "inscription")!=0){ //C1
+        inscription("LEA", 101);
+    }
 
 
 
-    exit(EXIT_FAILURE);
+}while(strcmp(input, "exit")!=0); //C0
+
+
+
+
 }
 
 
