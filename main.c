@@ -81,6 +81,13 @@ int main(int argc, char **argv){
         if (strcmp(input, "inscription")==0){ //----------C1---------//
             inscription();
         }
+        else if (strcmp(input, "absence") == 0) { //----------C2---------//
+
+        } else {
+            printf("Commande inconnue\n");
+            // elimine tous les caracteres jusqu'a fin de ligne
+            while (fgetc(stdin) != '\n') ;
+        }
 
     } while(strcmp(input, "exit")!=0); //--------C0-----------//
 
