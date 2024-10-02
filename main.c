@@ -73,18 +73,24 @@ void inscription() {
 //-------------------C2 essais-----------//
 void absence() {
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
-    int no_groupe;
+    int jour = 0;
+    int no_etudiant = 0;
+    char am_pm [3];
 
-    scanf("%s %d", nom_etu, &no_groupe);
 
-    // Recherche de l'étudiant dans le tableau
-    for (int i = 0; i < nb_etudiants; i++) {
-        if (strcmp(etudiants[i].nom_etu, nom_etu) == 0 && etudiants[i].no_groupe == no_groupe) {
-            etudiants[i].nb_absences++;
-            printf("Absence enregistree pour %s (groupe %d) - Nombre d'absences : %d\n", nom_etu, no_groupe, etudiants[i].nb_absences);
-            return;
-        }
+    scanf("%d %d %s", &no_etudiant, &jour, am_pm);
+    // transforme le num etudiant en index du tableau
+    no_etudiant--;
+
+    if (no_etudiant >= nb_etudiants) {
+        printf("Identifiant incorrecte \n");
+        return;
     }
+
+    etudiants[no_etudiant].nb_absences++;
+    printf("Absence enregistree [%d]", etudiants[no_etudiant].nb_absences);
+    return;
+    
 
     // Si l'étudiant n'est pas trouvé
     printf("Etudiant inconnu\n");
