@@ -12,16 +12,18 @@
 //#include "inscription .h"
 
 
-typedef struct{
+typedef struct {
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_groupe;
-}Etudiant ;
+    int nb_absences;
+}Etudiant;
 
 Etudiant etudiants[LIMITE];
 int nb_etudiants = 0;
 
+//---------------C1--------------//
 
-int verifier_nom(Etudiant etudiants[], int nb_etudiants, char *nom_etu, int no_groupe) {
+int verifier_nom(Etudiant etudiants[], int nb_etudiants, char* nom_etu, int no_groupe) {
     for (int i = 0; i < nb_etudiants; i++) {
         if (strcmp(etudiants[i].nom_etu, nom_etu) == 0 && etudiants[i].no_groupe == no_groupe) {
             return 1; // Nom déjà utilisé dans ce groupe
@@ -30,7 +32,7 @@ int verifier_nom(Etudiant etudiants[], int nb_etudiants, char *nom_etu, int no_g
     return 0;
 }
 
-void inscription(){
+void inscription() {
     Etudiant e;
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_groupe;
@@ -59,7 +61,6 @@ void inscription(){
 
         // Affichage de l'inscription enregistrée avec l'identifiant
         printf("Inscription enregistree (%d)\n", nb_etudiants);
-
     }
     else {
         printf("Nb max d'etudiants atteint\n");
@@ -68,30 +69,48 @@ void inscription(){
 
 
 
-//----------C1------------//
+
+//-------------------C2 essais-----------//
+void absence() {
+    char nom_etu[LONGUEUR_MAX_ETUDIANT];
+    int no_groupe;
+
+    scanf("%s %d", nom_etu, &no_groupe);
+
+    // Recherche de l'étudiant dans le tableau
+    for (int i = 0; i < nb_etudiants; i++) {
+        if (strcmp(etudiants[i].nom_etu, nom_etu) == 0 && etudiants[i].no_groupe == no_groupe) {
+            etudiants[i].nb_absences++;
+            printf("Absence enregistree pour %s (groupe %d) - Nombre d'absences : %d\n", nom_etu, no_groupe, etudiants[i].nb_absences);
+            return;
+        }
+    }
+
+    // Si l'étudiant n'est pas trouvé
+    printf("Etudiant inconnu\n");
+}
 
 
 
-int main(int argc, char **argv){
+//----------Main------------//
 
+int main(int argc, char** argv) {
     char input[LONGUEUR_MAX_COMMANDE];
-
-    do{
-        scanf("%s",input);
-        if (strcmp(input, "inscription")==0){ //----------C1---------//
+    do {
+        scanf("%s", input);
+        if (strcmp(input, "inscription") == 0) { //----------C1---------//
             inscription();
         }
         else if (strcmp(input, "absence") == 0) { //----------C2---------//
-
-        } else {
+            absence();
+        }
+        else {
             printf("Commande inconnue\n");
             // elimine tous les caracteres jusqu'a fin de ligne
-            while (fgetc(stdin) != '\n') ;
+            while (fgetc(stdin) != '\n');
         }
 
-    } while(strcmp(input, "exit")!=0); //--------C0-----------//
-
-
+    } while (strcmp(input, "exit") != 0); //--------C0-----------//
 }
 
 
