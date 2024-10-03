@@ -97,6 +97,16 @@ void absence() {
 }
 
 
+//----------------------C3--------------//
+void etudiant() {
+//
+//
+//         int
+//         scanf("%d");
+}
+
+
+
 
 //----------Main------------//
 
@@ -110,6 +120,15 @@ int main(int argc, char** argv) {
         else if (strcmp(input, "absence") == 0) { //----------C2---------//
             absence();
         }
+
+             else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
+                    etudiant();
+                }
+
+                else if (strcmp(input, "exit") == 0) {
+                    break;
+                }
+
         else {
             printf("Commande inconnue\n");
             // elimine tous les caracteres jusqu'a fin de ligne
