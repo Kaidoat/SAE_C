@@ -8,6 +8,7 @@
 #define LONGUEUR_MAX_COMMANDE 20
 #define LIMITE 100
 #define LONGUEUR_MAX_ETUDIANT 30
+#define AM_PM 3
 
 //#include "inscription .h"
 
@@ -18,7 +19,7 @@ typedef struct {
     int nb_absences;
 }Etudiant;
 
-Etudiant etudiants[LIMITE];
+Etudiant etudiant[LIMITE];
 int nb_etudiants = 0;
 
 //---------------C1--------------//
@@ -47,14 +48,14 @@ void inscription() {
         }
 
         // Vérification si le nom existe déjà dans le groupe
-        if (verifier_nom(etudiants, nb_etudiants, nom_etu, no_groupe)) {
+        if (verifier_nom(etudiant, nb_etudiants, nom_etu, no_groupe)) {
             printf("Nom incorrect\n");
             return;
         }
 
         // Enregistrement de l'étudiant en derniere position dans le tableau
-        strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
-        etudiants[nb_etudiants].no_groupe = no_groupe;
+        strcpy(etudiant[nb_etudiants].nom_etu, nom_etu);
+        etudiant[nb_etudiants].no_groupe = no_groupe;
 
         // augmente le nb d'etudiants inscrits
         nb_etudiants++;
@@ -75,7 +76,7 @@ void absence() {
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int jour = 0;
     int no_etudiant = 0;
-    char am_pm [3];
+    char am_pm [AM_PM];
 
 
     scanf("%d %d %s", &no_etudiant, &jour, am_pm);
@@ -87,8 +88,8 @@ void absence() {
         return;
     }
 
-    etudiants[no_etudiant].nb_absences++;
-    printf("Absence enregistree [%d]", etudiants[no_etudiant].nb_absences);
+    etudiant[no_etudiant].nb_absences++;
+    printf("Absence enregistree [%d]", etudiant[no_etudiant].nb_absences);
     return;
     
 
@@ -98,11 +99,19 @@ void absence() {
 
 
 //----------------------C3--------------//
-void etudiant() {
-//
-//
-//         int
-//         scanf("%d");
+void etudiants() {
+
+
+         int nb_annee;
+        scanf("%d", &nb_annee);
+        if (nb_etudiants==0){
+            printf("Aucun inscrit");
+            return;
+
+        }
+        else {
+        printf("il y a des etudiants");
+        }
 }
 
 
@@ -110,7 +119,7 @@ void etudiant() {
 
 //----------Main------------//
 
-int main(int argc, char** argv) {
+int main() {
     char input[LONGUEUR_MAX_COMMANDE];
     do {
         scanf("%s", input);
@@ -122,7 +131,7 @@ int main(int argc, char** argv) {
         }
 
              else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
-                    etudiant();
+                    etudiants();
                 }
 
                 else if (strcmp(input, "exit") == 0) {
