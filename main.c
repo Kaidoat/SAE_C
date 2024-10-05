@@ -8,16 +8,30 @@
 #define LONGUEUR_MAX_COMMANDE 20
 #define LIMITE 100
 #define LONGUEUR_MAX_ETUDIANT 30
-#define AM_PM 3
+#define JOUR_MAX 40
+#define LEN_AM_PM 3
+#define EXCUSE_MAX 80
+
+#define AM 0
+#define PM 1
 
 //#include "inscription .h"
-
+typedef struct {
+    unsigned int jour;
+    int demi_journee;
+    char excuse[EXCUSE_MAX];
+    bool excuse_valide;
+}Absence;
 
 typedef struct {
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
-    int no_groupe;
-    int nb_absences;
+    unsigned int no_groupe;
+    unsigned int nb_absences;
+    Absence absences[JOUR_MAX * 2];
 }Etudiant;
+
+
+
 
 Etudiant etudiant[LIMITE];
 int nb_etudiants = 0;
@@ -74,9 +88,10 @@ void inscription() {
 //-------------------C2 essais-----------//
 void absence() {
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
-    int jour = 0;
     int no_etudiant = 0;
-    char am_pm [AM_PM];
+    int jour = 0;
+    char am_pm[LEN_AM_PM];
+    int demi_journee;
 
 
     scanf("%d %d %s", &no_etudiant, &jour, am_pm);
@@ -84,17 +99,30 @@ void absence() {
     no_etudiant--;
 
     if (no_etudiant >= nb_etudiants) {
-        printf("Identifiant incorrecte \n");
+        printf("Identifiant incorrect\n");
         return;
     }
 
+    Etudiant* etudiant = &etudiant[no_etudiant];
+
+    etudiant->absences[etudiant->nb_absences].jour = jour;
+
+    if (strcmp(am_pm, "am") == 0) {
+        demi_journee = AM;
+    }
+    else if (strcmp(am_pm, "pm") == 0) {
+        demi_journee = PM;
+    }
+    else {
+        printf("Commande inconnu");
+    }
+    etudiant->absences[etudiant->nb_absences].demi_journee = am_pm;
+
+    
     etudiant[no_etudiant].nb_absences++;
     printf("Absence enregistree [%d]\n", etudiant[no_etudiant].nb_absences);
     return;
-    
 
-    // Si l'étudiant n'est pas trouvé
-    printf("Etudiant inconnu\n");
 }
 
 
@@ -102,21 +130,21 @@ void absence() {
 void etudiants() {
 
 
-         int nb_annee;
-        scanf("%d", &nb_annee);
-        if (nb_etudiants==0){
-            printf("Aucun inscrit\n");
-            return;
-        }
+    int nb_annee;
+    scanf("%d", &nb_annee);
+    if (nb_etudiants == 0) {
+        printf("Aucun inscrit\n");
+        return;
+    }
 
-        if(nb_annee==0){
-            printf("Date incorrect\n");
-        }
-        int T=0;
-        while (nb_etudiants>T){
-            printf("(%d) %c %d\n",nb_etudiants , etudiant[nb_etudiants].nom_etu , etudiant[nb_etudiants].no_groupe);
-            T++;
-        }
+    if (nb_annee == 0) {
+        printf("Date incorrect\n");
+    }
+    int T = 0;
+    while (nb_etudiants > T) {
+        printf("(%d) %c %d\n", nb_etudiants, etudiant[nb_etudiants].nom_etu, etudiant[nb_etudiants].no_groupe);
+        T++;
+    }
 
 
 
@@ -138,13 +166,13 @@ int main() {
             absence();
         }
 
-             else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
-                    etudiants();
-                }
+        else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
+            etudiants();
+        }
 
-                else if (strcmp(input, "exit") == 0) {
-                    break;
-                }
+        else if (strcmp(input, "exit") == 0) {
+            break;
+        }
 
         else {
             printf("Commande inconnue\n");
