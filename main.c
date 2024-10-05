@@ -89,7 +89,7 @@ void absence() {
     }
 
     etudiant[no_etudiant].nb_absences++;
-    printf("Absence enregistree [%d]", etudiant[no_etudiant].nb_absences);
+    printf("Absence enregistree [%d]\n", etudiant[no_etudiant].nb_absences);
     return;
     
 
@@ -105,13 +105,21 @@ void etudiants() {
          int nb_annee;
         scanf("%d", &nb_annee);
         if (nb_etudiants==0){
-            printf("Aucun inscrit");
+            printf("Aucun inscrit\n");
             return;
+        }
 
+        if(nb_annee==0){
+            printf("Date incorrect\n");
         }
-        else {
-        printf("il y a des etudiants");
+        int T=0;
+        while (nb_etudiants>T){
+            printf("(%d) %c %d\n",nb_etudiants , etudiant[nb_etudiants].nom_etu , etudiant[nb_etudiants].no_groupe);
+            T++;
         }
+
+
+
 }
 
 
