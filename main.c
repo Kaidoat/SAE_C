@@ -87,6 +87,7 @@ void inscription() {
 
 //-------------------C2 essais-----------//
 void absence() {
+    Etudiant e;
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_etudiant = 0;
     int jour = 0;
@@ -98,14 +99,24 @@ void absence() {
     // transforme le num etudiant en index du tableau
     no_etudiant--;
 
+    if (jour < 1 || jour > JOUR_MAX) {
+        printf("Jour incorrect\n");
+        return;
+    }
+
+
     if (no_etudiant >= nb_etudiants) {
         printf("Identifiant incorrect\n");
         return;
     }
 
-    Etudiant* etudiant = &etudiant[no_etudiant];
+    if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
+        printf("Identifiant incorrect\n");
+        return;
+    }
 
-    etudiant->absences[etudiant->nb_absences].jour = jour;
+    etudiant[no_etudiant].absences[etudiant[no_etudiant].nb_absences].jour = jour;
+
 
     if (strcmp(am_pm, "am") == 0) {
         demi_journee = AM;
@@ -114,8 +125,10 @@ void absence() {
         demi_journee = PM;
     }
     else {
-        printf("Commande inconnu");
+        printf("Commande inconnu/n");
+        return;
     }
+
     etudiant->absences[etudiant->nb_absences].demi_journee = am_pm;
 
     
@@ -145,8 +158,6 @@ void etudiants() {
         printf("(%d) %c %d\n", nb_etudiants, etudiant[nb_etudiants].nom_etu, etudiant[nb_etudiants].no_groupe);
         T++;
     }
-
-
 
 }
 
