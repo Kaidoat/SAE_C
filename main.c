@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #pragma warning(disable:4996)
 
-
+#define MAX_INPUT 150
 #define LONGUEUR_MAX_COMMANDE 20
 #define LIMITE 100
 #define LONGUEUR_MAX_ETUDIANT 30
@@ -15,16 +15,23 @@
 #define AM 0
 #define PM 1
 
+typedef enum {
+    A_FOURNIR = 0,
+    A_VALIDER,
+    ACCEPTEE,
+    REFUSEE
+} StatutExcuse;
+
 //#include "inscription .h"
 typedef struct {
     unsigned int jour;
     int demi_journee;
     char excuse[EXCUSE_MAX];
-    bool excuse_valide;
+    StatutExcuse statut_excuse;
 }Absence;
 
 typedef struct {
-    char nom_etu[LONGUEUR_MAX_ETUDIANT];
+    char nom_etu[LONGUEUR_MAX_ETUDIANT+1]; // +1 pour zero final
     unsigned int no_groupe;
     unsigned int nb_absences;
     Absence absences[JOUR_MAX * 2];
@@ -33,7 +40,7 @@ typedef struct {
 
 
 
-Etudiant etudiant[LIMITE];
+Etudiant etudiants[LIMITE];
 int nb_etudiants = 0;
 
 //---------------C1--------------//
@@ -49,27 +56,27 @@ int verifier_nom(Etudiant etudiants[], int nb_etudiants, char* nom_etu, int no_g
 
 void inscription() {
     Etudiant e;
-    char nom_etu[LONGUEUR_MAX_ETUDIANT];
+    char nom_etu[MAX_INPUT];
     int no_groupe;
 
     scanf("%s %d", nom_etu, &no_groupe);
 
     if (nb_etudiants < LIMITE) {
         // Vérification de la longueur du nom
-        if (strlen(nom_etu) > LONGUEUR_MAX_ETUDIANT - 1) {
+        if (strlen(nom_etu) > LONGUEUR_MAX_ETUDIANT) {
             printf("Nom incorrect\n");
             return;
         }
 
         // Vérification si le nom existe déjà dans le groupe
-        if (verifier_nom(etudiant, nb_etudiants, nom_etu, no_groupe)) {
+        if (verifier_nom(etudiants, nb_etudiants, nom_etu, no_groupe)) {
             printf("Nom incorrect\n");
             return;
         }
 
         // Enregistrement de l'étudiant en derniere position dans le tableau
-        strcpy(etudiant[nb_etudiants].nom_etu, nom_etu);
-        etudiant[nb_etudiants].no_groupe = no_groupe;
+        strcpy(etudiants[nb_etudiants].nom_etu, nom_etu);
+        etudiants[nb_etudiants].no_groupe = no_groupe;
 
         // augmente le nb d'etudiants inscrits
         nb_etudiants++;
@@ -87,7 +94,6 @@ void inscription() {
 
 //-------------------C2 essais-----------//
 void absence() {
-    Etudiant e;
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_etudiant = 0;
     int jour = 0;
@@ -115,9 +121,6 @@ void absence() {
         return;
     }
 
-    etudiant[no_etudiant].absences[etudiant[no_etudiant].nb_absences].jour = jour;
-
-
     if (strcmp(am_pm, "am") == 0) {
         demi_journee = AM;
     }
@@ -125,22 +128,23 @@ void absence() {
         demi_journee = PM;
     }
     else {
-        printf("Commande inconnu/n");
+        printf("Commande inconnue/n");
         return;
     }
 
-    etudiant->absences[etudiant->nb_absences].demi_journee = am_pm;
-
+    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = jour;
+    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
+    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
+    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].statut_excuse = A_FOURNIR;
     
-    etudiant[no_etudiant].nb_absences++;
-    printf("Absence enregistree [%d]\n", etudiant[no_etudiant].nb_absences);
-    return;
+    etudiants[no_etudiant].nb_absences++;
+    printf("Absence enregistree [%d]\n", etudiants[no_etudiant].nb_absences);
 
 }
 
 
 //----------------------C3--------------//
-void etudiants() {
+void liste_etudiants() {
 
 
     int nb_annee;
@@ -155,7 +159,7 @@ void etudiants() {
     }
     int T = 0;
     while (nb_etudiants > T) {
-        printf("(%d) %c %d\n", nb_etudiants, etudiant[nb_etudiants].nom_etu, etudiant[nb_etudiants].no_groupe);
+        printf("(%d) %s %d\n", nb_etudiants, etudiants[nb_etudiants].nom_etu, etudiants[nb_etudiants].no_groupe);
         T++;
     }
 
@@ -178,7 +182,7 @@ int main() {
         }
 
         else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
-            etudiants();
+            liste_etudiants();
         }
 
         else if (strcmp(input, "exit") == 0) {

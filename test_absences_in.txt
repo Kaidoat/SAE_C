@@ -1,0 +1,3 @@
+inscription UnNom 1
+absence 1 2 am
+exit
