@@ -22,7 +22,7 @@ typedef enum {
     REFUSEE
 } StatutExcuse;
 
-//#include "inscription .h"
+
 typedef struct {
     unsigned int jour;
     int demi_journee;
@@ -146,7 +146,7 @@ void absence() {
 //----------------------C3--------------//
 void liste_etudiants() {
 
-
+    Etudiant e;
     int nb_annee;
     scanf("%d", &nb_annee);
     if (nb_etudiants == 0) {
@@ -157,10 +157,13 @@ void liste_etudiants() {
     if (nb_annee == 0) {
         printf("Date incorrect\n");
     }
-    int T = 0;
-    while (nb_etudiants > T) {
+
+    for (int i=1;nb_etudiants!=i; nb_etudiants--){
+
         printf("(%d) %s %d\n", nb_etudiants, etudiants[nb_etudiants].nom_etu, etudiants[nb_etudiants].no_groupe);
-        T++;
+
+
+
     }
 
 }
