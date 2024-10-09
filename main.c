@@ -11,6 +11,7 @@
 #define JOUR_MAX 40
 #define LEN_AM_PM 3
 #define EXCUSE_MAX 80
+#define LONGUEUR_MAX_JUSTIF 51
 
 #define AM 0
 #define PM 1
@@ -94,11 +95,10 @@ void inscription() {
 
 //-------------------C2 essais-----------//
 void absence() {
-    char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_etudiant = 0;
     int jour = 0;
-    char am_pm[LEN_AM_PM];
-    int demi_journee;
+    char am_pm[MAX_INPUT];
+    int demi_journee = 0;
 
 
     scanf("%d %d %s", &no_etudiant, &jour, am_pm);
@@ -109,7 +109,6 @@ void absence() {
         printf("Jour incorrect\n");
         return;
     }
-
 
     if (no_etudiant >= nb_etudiants) {
         printf("Identifiant incorrect\n");
@@ -162,6 +161,56 @@ void liste_etudiants() {
         printf("(%d) %s %d\n", nb_etudiants, etudiants[nb_etudiants].nom_etu, etudiants[nb_etudiants].no_groupe);
         T++;
     }
+
+}
+
+
+//--------------------C4-----------------------------//
+void depot_justificatif() {
+    int no_etudiant, jour;
+    char justificatif[LONGUEUR_MAX_JUSTIF];  // pour le texte de l'excuse
+
+    scanf("%d %d %[^\n]", &no_etudiant, &jour, justificatif);
+
+    if (no_etudiant > nb_etudiants || no_etudiant <= 0) {
+        printf("Identifiant incorrect\n");
+        return;
+    }
+
+    Etudiant* etudiant = &etudiant[no_etudiant - 1];
+
+    // Recherche de l'absence correspondant au jour
+    int index_absence = 0;
+    for (int i = 0; i < etudiant->nb_absences; i++) {
+        if (etudiant->absences[i].jour == jour) {
+            index_absence = i;
+            break;
+        }
+    }
+
+    Absence* absence = &etudiant->absences[index_absence];
+    
+
+    // cas ou le justif est deja fourni
+    if (absence->statut_excuse != A_FOURNIR) {
+        printf("Justificatif deja connu\n");
+        return;
+    }
+
+
+    // Verification si justificatif est fourni dans les temps (3j max)
+    if (jour <= absence->jour + 3) {
+        strcpy(absence->excuse, justificatif);
+        absence->statut_excuse = A_VALIDER;
+        printf("Justificatif enregistre\n");
+    }
+    else {
+        strcpy(absence->excuse, justificatif);
+        absence->statut_excuse = REFUSEE;
+        printf("Justificatif enregistre\n");
+    }
+
+   
 
 }
 
