@@ -93,18 +93,19 @@ void inscription() {
 
 //-------------------C2----------------//
 void absence() {
+    Absence a;
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_etudiant = 0;
-    int jour = 0;
+    a.jour = 0;
     char am_pm[LEN_AM_PM];
     int demi_journee;
 
 
-    scanf("%d %d %s", &no_etudiant, &jour, am_pm);
+    scanf("%d %d %s", &no_etudiant, &a.jour, am_pm);
     // transforme le num etudiant en index du tableau
     no_etudiant--;
 
-    if (jour < 1 || jour > JOUR_MAX) {
+    if (a.jour < 1 || a.jour > JOUR_MAX) {
         printf("Jour incorrect\n");
         return;
     }
@@ -127,11 +128,11 @@ void absence() {
         demi_journee = PM;
     }
     else {
-        printf("Commande inconnue/n");
+        printf("Commande inconnue\n");
         return;
     }
 
-    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = jour;
+    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = a.jour;
     etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
     etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
     etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].statut_excuse = A_FOURNIR;
@@ -141,7 +142,6 @@ void absence() {
 
 }
 
-
 int compare_etudiants(Etudiant* E1, Etudiant* E2) {
     if (E1->no_groupe != E2->no_groupe)
         return E1->no_groupe - E2->no_groupe;
@@ -149,44 +149,37 @@ int compare_etudiants(Etudiant* E1, Etudiant* E2) {
         return strcmp(E1->nom_etu, E2->nom_etu);
 }
 
-int compte_absence(int jour, int id) {
-    int compte_absence=0;
-    for (int i = 0; i < compte_absence; ++i) {
-        if (absences[i].id == id && absences[i].jour <= jour) {
-            ++compte_absence;
-        }
-    }
-    return compte_absence;
-}
+
+
+
+
+
 
 
 //----------------------C3--------------//
 void liste_etudiants() {
 
-    Etudiant e;
-    int nb_annee;
-    scanf("%d", &nb_annee);
+    Absence a;
+    a.jour=0;
+    scanf("%d",&a.jour);
 
-    if (nb_etudiants == 0) {
+
+    if (a.jour<1){
+        printf("Date incorrecte\n");
+
+    }
+
+    if (nb_etudiants==0){
         printf("Aucun inscrit\n");
-        return;
+
     }
 
-    if (nb_annee == 0) {
-        printf("Date incorrect\n");
+    for (int i = 0; i < nb_etudiants ; ++i) {
+        // Utiliser i + 1 pour avoir les indices dans le bon ordre
+        printf("(%d) %s %d %d\n", nb_etudiants-i, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
     }
-
-        else {
-            qsort(etudiants, nb_etudiants, sizeof(Etudiant), compare_etudiants);
-            int taille = savoir_max_caractere();
-            for (int i = 0; i < Compteur_etudiants; ++i) {
-                printf("(%d) %-*s %3d %2d\n", etudiants[i].numero, taille, etudiants[i].nom,
-                       etudiants[i].groupe, savoir_nombres_absences(jour, etudiants[i].numero));
-
-
-
-            }
 }
+
 
 //--------------C4-----------//
 void depot_justificatif() {
@@ -261,12 +254,6 @@ int main() {
 
         else if (strcmp(input, "exit") == 0) {
             break;
-        }
-
-        else {
-            printf("Commande inconnue\n");
-            // elimine tous les caracteres jusqu'a fin de ligne
-            while (fgetc(stdin) != '\n');
         }
 
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
