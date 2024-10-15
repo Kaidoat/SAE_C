@@ -1,6 +1,8 @@
-inscription UnNom 1
-inscription UnNom 2
-inscription UnNom 1
+inscription Lea 105
+inscription Paul 106
+inscription Manon 108
+inscription Marie 106
+inscription Paul 109
 inscription 012345678901234567890123456789 1
 inscription 0123456789012345678901234567890 1
 exit
