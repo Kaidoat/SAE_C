@@ -35,6 +35,7 @@ typedef struct {
     unsigned int no_groupe;
     unsigned int nb_absences;
     Absence absences[JOUR_MAX * 2];
+    int id;
 } Etudiant;
 
 
@@ -53,9 +54,15 @@ int verifier_nom(Etudiant etudiants[], int nb_etudiants, char* nom_etu, int no_g
 void inscription(Etudiant etudiants[], int* nb_etudiants) {
     Etudiant e;
     char nom_etu[MAX_INPUT];
-    int no_groupe;
+    int no_groupe = -1;
 
     scanf("%s %d", nom_etu, &no_groupe);
+
+    if (no_groupe==-1){
+        printf("Groupe incorrect\n ");
+        return;
+    }
+
 
     if (*nb_etudiants < LIMITE) {
         // Vérification de la longueur du nom
@@ -129,17 +136,57 @@ void absence(Etudiant etudiants[], int nb_etudiants) {
 
 
 //----------------------C3--------------//
-void liste_etudiants(Etudiant etudiants[], int nb_etudiants) {
+void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
+
+    Absence a ;
+    a.jour=0;
+    scanf("%d", &a.jour );
     if (nb_etudiants == 0) {
         printf("Aucun inscrit\n");
         return;
     }
 
+    if (a.jour < 1) {
+        printf("Date incorrecte\n");
+        return;
+    }
+
+// Trier les étudiants par groupe (ordre décroissant) puis par nom (ordre croissant)
+    for (int i = 0; i < nb_etudiants - 1; i++) {
+        for (int j = i + 1; j < nb_etudiants; j++) {
+            // Si le groupe de l'étudiant i est plus petit que celui de l'étudiant j (ordre décroissant)
+            // ou si les groupes sont égaux et le nom de l'étudiant i est plus grand que celui de l'étudiant j (ordre croissant)
+            if (etudiants[i].no_groupe < etudiants[j].no_groupe ||
+                (etudiants[i].no_groupe == etudiants[j].no_groupe && strcmp(etudiants[i].nom_etu, etudiants[j].nom_etu) > 0)) {
+
+                // Échanger les deux étudiants
+                Etudiant temp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = temp;
+            }
+        }
+    }
+
+
     for (int i = 0; i < nb_etudiants; ++i) {
         // Utiliser i + 1 pour avoir les indices dans le bon ordre
-        printf("(%d) %s %d %d\n", nb_etudiants - i, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
+        printf("(%2d) %-5s %2d %2d\n", nb_etudiants - i, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
     }
 }
+
+int compare_etudiants(Etudiant* E1, Etudiant* E2) {
+    if (E1->no_groupe != E2->no_groupe)
+        return E1->no_groupe - E2->no_groupe;
+    else
+        return strcmp(E1->nom_etu, E2->nom_etu);
+}
+
+
+
+
+
+
+
 
 
 
@@ -201,14 +248,22 @@ int main() {
         scanf("%s", input);
         if (strcmp(input, "inscription") == 0) { //----------C1---------//
             inscription(etudiants, &nb_etudiants);
+
         } else if (strcmp(input, "absence") == 0) { //----------C2---------//
             absence(etudiants, nb_etudiants);
+
         } else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
+
             liste_etudiants(etudiants, nb_etudiants);
+
         } else if (strcmp(input, "justificatif") == 0) { //---------C4----------//
             depot_justificatif(etudiants, nb_etudiants);
-        } else if (strcmp(input, "exit") == 0) {
+        }
+        else if (strcmp(input, "exit") == 0) { //---------C4----------//
             break;
+        }
+        else if (strcmp(input, "exit") == 0) { //---------C4----------//
+            printf("Commande inconnue\n");
         }
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
 }
