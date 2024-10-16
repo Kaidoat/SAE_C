@@ -207,6 +207,7 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
 
 //--------------------C4-----------------------------//
 void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
+
     int no_etudiant, jour;
     char justificatif[LONGUEUR_MAX_JUSTIF];  // pour le texte de l'excuse
 
@@ -220,7 +221,7 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
     Etudiant* etudiant = &etudiant[no_etudiant - 1];
 
     // Recherche de l'absence correspondant au jour
-    int index_absence = 0;
+    int index_absence = -1; // aucune absence trouvee
     for (int i = 0; i < etudiant->nb_absences; i++) {
         if (etudiant->absences[i].jour == jour) {
             index_absence = i;
@@ -228,8 +229,16 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
         }
     }
 
+    if(index_absence==-1){
+        printf("Absence non trouvée");
+        return;
+
+    }
+
+
+
     Absence* absence = &etudiant->absences[index_absence];
-    
+
 
     // cas ou le justif est deja fourni
     if (absence->statut_excuse != A_FOURNIR) {
@@ -250,59 +259,16 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
         printf("Justificatif enregistre\n");
     }
 
-   
+
 
 }
 
-/*
-//--------------C4-----------//
-void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
-    int no_etudiant, jour;
-    char justificatif[LONGUEUR_MAX_JUSTIF];  // pour le texte de l'excuse
 
-    scanf("%d %d %[^\n]", &no_etudiant, &jour, justificatif);
+void validations (){
 
-    if (no_etudiant > nb_etudiants || no_etudiant <= 0) {
-        printf("Identifiant incorrect\n");
-        return;
-    }
-
-    Etudiant* etudiant = &etudiants[no_etudiant - 1];
-
-    // Recherche de l'absence correspondant au jour
-    int index_absence = -1;
-    for (int i = 0; i < etudiant->nb_absences; i++) {
-        if (etudiant->absences[i].jour == jour) {
-            index_absence = i;
-            break;
-        }
-    }
-
-    if (index_absence == -1) {
-        printf("Absence non trouvée\n");
-        return;
-    }
-
-    Absence* absence = &etudiant->absences[index_absence];
-
-    // Cas où le justificatif est déjà fourni
-    if (absence->statut_excuse == ACCEPTEE) {
-        printf("Justificatif deja connu\n");
-        return;
-    }
-
-    // Vérification si justificatif est fourni dans les temps (3j max)
-    if (jour <= absence->jour + 3) {
-        strcpy(absence->excuse, justificatif);
-        absence->statut_excuse = A_VALIDER;
-        printf("Justificatif enregistre\n");
-    } else {
-        strcpy(absence->excuse, justificatif);
-        absence->statut_excuse = REFUSEE;
-        printf("Justificatif enregistre\n");
-    }
 }
-*/
+
+
 
 //----------Main------------//
 int main() {
@@ -322,6 +288,10 @@ int main() {
             liste_etudiants(etudiants, nb_etudiants);
         } else if (strcmp(input, "justificatif") == 0) { //---------C4----------//
             depot_justificatif(etudiants, nb_etudiants);
+        }
+
+        else if (strcmp(input, "validations") == 0){
+            validations();
         }
         else if (strcmp(input, "exit") == 0) { //---------C4----------//
             break;
