@@ -77,13 +77,17 @@ void inscription(Etudiant etudiants[], int* nb_etudiants) {
             return;
         }
 
+
         // Enregistrement de l'étudiant en derniere position dans le tableau
         strcpy(etudiants[*nb_etudiants].nom_etu, nom_etu);
         etudiants[*nb_etudiants].no_groupe = no_groupe;
         etudiants[*nb_etudiants].nb_absences = 0;
+        etudiants[*nb_etudiants].id = *nb_etudiants+1;
 
         // augmente le nb d'etudiants inscrits
         (*nb_etudiants)++;
+
+
 
         // Affichage de l'inscription enregistrée avec l'identifiant
         printf("Inscription enregistree (%d)\n", *nb_etudiants);
@@ -92,14 +96,27 @@ void inscription(Etudiant etudiants[], int* nb_etudiants) {
     }
 }
 
+int verif_absence(Etudiant etudiants[], int no_etudiant, int jour, int demi_journee){
+
+    for(int i =0;i<etudiants[no_etudiant].nb_absences;i++){
+        if (etudiants[no_etudiant].absences[i].jour == jour && etudiants[no_etudiant].absences[i].demi_journee == demi_journee){
+            printf("Absence deja connu ");
+            return 0;
+        }
+
+    }
+    return 1 ;
+}
 
 //-------------------C2----------------//
-void absence(Etudiant etudiants[], int nb_etudiants) {
+void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
+
     char nom_etu[LONGUEUR_MAX_ETUDIANT];
     int no_etudiant = 0;
     int jour = 0;
     char am_pm[MAX_INPUT];
     int demi_journee = 0;
+    int var_retour;
 
     scanf("%d %d %s", &no_etudiant, &jour, am_pm);
     // transforme le num etudiant en index du tableau
@@ -125,17 +142,25 @@ void absence(Etudiant etudiants[], int nb_etudiants) {
     } else if (strcmp(am_pm, "pm") == 0) {
         demi_journee = PM;
     } else {
-        printf("Commande inconnue\n");
+        printf("Demi-journee incorrecte \n");
         return;
     }
 
-    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = jour;
-    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
-    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
-    etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].statut_excuse = A_FOURNIR;
 
-    etudiants[no_etudiant].nb_absences++;
-    printf("Absence enregistree [%d]\n", etudiants[no_etudiant].nb_absences);
+    var_retour = verif_absence(etudiants,no_etudiant,jour, demi_journee);
+    if (var_retour){
+
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = jour;
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].statut_excuse = A_FOURNIR;
+
+        etudiants[no_etudiant].nb_absences++;
+        (*Nb_absencesTotal)++;
+        printf("Absence enregistree [%d]\n",*Nb_absencesTotal);
+    }
+
+
 }
 
 
@@ -162,7 +187,7 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
             // Si le groupe de l'étudiant i est plus petit que celui de l'étudiant j (ordre décroissant)
             // ou si les groupes sont égaux et le nom de l'étudiant i est plus grand que celui de l'étudiant j (ordre croissant)
             if (etudiants[i].no_groupe < etudiants[j].no_groupe ||
-                (etudiants[i].no_groupe == etudiants[j].no_groupe && strcmp(etudiants[i].nom_etu, etudiants[j].nom_etu) > 0)) {
+                (etudiants[i].no_groupe == etudiants[j].no_groupe && strcmp(etudiants[i].nom_etu, etudiants[j].nom_etu) < 0)) {
 
                 // Échanger les deux étudiants
                 Etudiant temp = etudiants[i];
@@ -175,7 +200,7 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
 
     for (int i = 0; i < nb_etudiants; ++i) {
         // Utiliser i + 1 pour avoir les indices dans le bon ordre
-        printf("(%2d) %-5s %2d %2d\n", nb_etudiants - i, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
+        printf("(%d) %-5s %5d %5d\n", etudiants[nb_etudiants - 1 - i].id, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
     }
 }
 
@@ -283,14 +308,16 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
 int main() {
     Etudiant etudiants[LIMITE];
     int nb_etudiants = 0;
-    char input[LONGUEUR_MAX_COMMANDE];
+    char input[LONGUEUR_MAX_COMMANDE+1];
+    int NB_absences_Total=0;
 
     do {
         scanf("%s", input);
         if (strcmp(input, "inscription") == 0) { //----------C1---------//
             inscription(etudiants, &nb_etudiants);
+
         } else if (strcmp(input, "absence") == 0) { //----------C2---------//
-            absence(etudiants, nb_etudiants);
+            absence(etudiants, nb_etudiants, &NB_absences_Total);
         } else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
             liste_etudiants(etudiants, nb_etudiants);
         } else if (strcmp(input, "justificatif") == 0) { //---------C4----------//
