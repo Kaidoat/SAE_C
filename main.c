@@ -12,6 +12,7 @@
 #define LEN_AM_PM 3
 #define EXCUSE_MAX 80
 #define LONGUEUR_MAX_JUSTIF 51
+#define LONGUEUR_MAX_ABSENCE 100
 
 #define AM 0
 #define PM 1
@@ -37,6 +38,7 @@ typedef struct {
     Absence absences[JOUR_MAX * 2];
     int id;
 } Etudiant;
+
 
 
 
@@ -100,7 +102,7 @@ int verif_absence(Etudiant etudiants[], int no_etudiant, int jour, int demi_jour
 
     for(int i =0;i<etudiants[no_etudiant].nb_absences;i++){
         if (etudiants[no_etudiant].absences[i].jour == jour && etudiants[no_etudiant].absences[i].demi_journee == demi_journee){
-            printf("Absence deja connu ");
+            printf("Absence deja connue ");
             return 0;
         }
 
@@ -123,7 +125,7 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
     no_etudiant--;
 
     if (jour < 1 || jour > JOUR_MAX) {
-        printf("Jour incorrect\n");
+        printf("Date incorrecte\n");
         return;
     }
 
@@ -163,6 +165,19 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
 
 }
 
+int savoir_max_caractere(Etudiant etudiants[], int nb_etudiants) {
+    if (nb_etudiants  == 0)
+        return 0;
+
+    int caract = 0;
+    for (int i = 0; i < nb_etudiants; ++i) {
+        if (strlen(etudiants[i].nom_etu) > caract)
+            caract = strlen(etudiants[i].nom_etu);
+    }
+    return caract;
+}
+
+
 
 
 //----------------------C3--------------//
@@ -198,9 +213,11 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
     }
 
 
+    int taille = savoir_max_caractere(etudiants, nb_etudiants);
     for (int i = 0; i < nb_etudiants; ++i) {
         // Utiliser i + 1 pour avoir les indices dans le bon ordre
-        printf("(%d) %-5s %5d %5d\n", etudiants[nb_etudiants - 1 - i].id, etudiants[nb_etudiants - 1 - i].nom_etu, etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
+        printf("(%d) %-*s %2d %d\n", etudiants[nb_etudiants - 1 - i].id, taille, etudiants[nb_etudiants - 1 - i].nom_etu,
+            etudiants[nb_etudiants - 1 - i].no_groupe, etudiants[nb_etudiants - 1 - i].nb_absences);
     }
 }
 
@@ -218,7 +235,7 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants) {
         return;
     }
 
-    Etudiant* etudiant = &etudiant[no_etudiant - 1];
+    Etudiant* etudiant = &etudiants[no_etudiant - 1];
 
     // Recherche de l'absence correspondant au jour
     int index_absence = -1; // aucune absence trouvee
