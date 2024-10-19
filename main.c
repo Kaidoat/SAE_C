@@ -40,6 +40,20 @@ typedef struct {
 } Etudiant;
 
 
+typedef struct{
+    int id_absence;
+    int id_etudiant;
+    char nom_etu[LONGUEUR_MAX_ETUDIANT + 1];
+    int no_groupe;
+    unsigned int jour;
+    int demi_journee;
+   char excuse[EXCUSE_MAX];
+
+}Validations;
+
+
+
+
 
 
 //---------------C1--------------//
@@ -301,8 +315,84 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants, int nb_absences_
     }
 }
 
-
+//--------------------C5-----------------------------//
 void validations (Etudiant etudiants[], int nb_etudiants){
+
+        bool a_des_validations = false;
+        int nb_validations = 0;
+        Validations validations[LONGUEUR_MAX_ABSENCE];
+
+
+
+        for(int i =0;i<nb_etudiants;i++){
+            for(int j=0;j<etudiants[i].nb_absences;j++){
+                Absence *absence= &etudiants[i].absences[j];
+
+
+                if (absence->statut_excuse ==A_VALIDER){
+                    a_des_validations = true;
+
+                    validations[nb_validations].id_absence =j+1;
+                    validations[nb_validations].id_etudiant = etudiants[i].id;
+                    strcpy(validations[nb_validations].nom_etu, etudiants[i].nom_etu);
+                    validations[nb_validations].no_groupe = etudiants[i].no_groupe;
+                    validations[nb_validations].jour = absence->jour;
+                    validations[nb_validations].demi_journee= absence->demi_journee;
+                    strcpy(validations[nb_validations].excuse, absence->excuse);
+                    nb_validations++;
+                }
+
+            }
+
+        }
+
+    if (!a_des_validations){
+        printf("Aucune validation en attente\n ");
+        return;
+    }
+
+    for (int i = 0; i < nb_validations - 1; i++) {
+        for (int j = i + 1; j < nb_validations; j++) {
+            if (validations[i].id_etudiant > validations[j].id_etudiant ||
+                (validations[i].id_etudiant == validations[j].id_etudiant && validations[i].jour > validations[j].jour)) {
+                Validations temp = validations[i];
+                validations[i] = validations[j];
+                validations[j] = temp;
+            }
+        }
+    }
+
+    for(int i= 0;i<nb_validations;i++){
+        printf("[%d] (%d) %s %2d %d/%s (%s)\n",
+               validations[i].id_absence,
+               validations[i].id_etudiant,
+               validations[i].nom_etu,
+               validations[i].no_groupe,
+               validations[i].jour,
+               (validations[i].demi_journee == AM)?"am":"pm",
+               validations[i].excuse);
+
+    }
+
+}
+
+//-----------------C6-----------------//
+void validation(){
+    if (strcmp(am_pm, "am") == 0) {
+        demi_journee = AM;
+    } else if (strcmp(am_pm, "pm") == 0) {
+        demi_journee = PM;
+    } else {
+        printf("Demi-journee incorrecte \n");
+        return;
+    }
+
+
+
+
+
+
+
 
 
 }
@@ -311,32 +401,38 @@ void validations (Etudiant etudiants[], int nb_etudiants){
 
 //----------Main------------//
 int main() {
+
+    Etudiant etu;
     Etudiant etudiants[LIMITE];
     int nb_etudiants = 0;
     char input[LONGUEUR_MAX_COMMANDE+1];
     int nb_absences_total=0;
+
 
     do {
         scanf("%s", input);
         if (strcmp(input, "inscription") == 0) { //----------C1---------//
             inscription(etudiants, &nb_etudiants);
 
-        } else if (strcmp(input, "absence") == 0) { //----------C2---------//
+        } else if (strcmp(input, "absence") == 0) { //----------*C2*---------//
             absence(etudiants, nb_etudiants, &nb_absences_total);
 
-        } else if (strcmp(input, "etudiants") == 0) { //----------C3---------//
+        } else if (strcmp(input, "etudiants") == 0) { //----------*C3*---------//
             liste_etudiants(etudiants, nb_etudiants);
 
-        } else if (strcmp(input, "justificatif") == 0) { //---------C4----------//
+        } else if (strcmp(input, "justificatif") == 0) { //---------*C4*----------//
             depot_justificatif(etudiants, nb_etudiants, nb_absences_total);
         }
-        else if (strcmp(input, "validations") == 0){
+        else if (strcmp(input, "validations") == 0){ //----------*C5*---------//
             validations(etudiants, nb_etudiants);
         }
-        else if (strcmp(input, "exit") == 0) { //---------C4----------//
+        else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
+            validation();
+        }
+        else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             break;
         }
-        else if (strcmp(input, "exit") == 0) { //---------C4----------//
+        else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             printf("Commande inconnue\n");
         }
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
