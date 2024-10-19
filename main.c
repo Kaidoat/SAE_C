@@ -377,26 +377,113 @@ void validations (Etudiant etudiants[], int nb_etudiants){
 }
 
 //-----------------C6-----------------//
-void validation(){
-    if (strcmp(am_pm, "am") == 0) {
-        demi_journee = AM;
-    } else if (strcmp(am_pm, "pm") == 0) {
-        demi_journee = PM;
-    } else {
-        printf("Demi-journee incorrecte \n");
+//void validation(){
+//    if (strcmp(am_pm, "am") == 0) {
+//        demi_journee = AM;
+//    } else if (strcmp(am_pm, "pm") == 0) {
+//        demi_journee = PM;
+//    } else {
+//        printf("Demi-journee incorrecte \n");
+//        return;
+//    }
+//
+//
+//
+//
+//
+//
+//
+//
+//}
+
+
+
+void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
+
+    int no_etudiant;
+    int jour;
+
+    scanf("%d %d", &no_etudiant, &jour);
+    // transforme le num etudiant en index du tableau
+    no_etudiant--;
+
+    if (jour < 1 || jour > JOUR_MAX) {
+        printf("Jour incorrect\n");
         return;
     }
 
+    if (no_etudiant >= nb_etudiants) {
+        printf("Identifiant incorrect\n");
+        return;
+    }
 
+    if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
+        printf("Identifiant incorrect\n");
+        return;
+    }
 
+    //pour acceder à l'etudiant
+    Etudiant* etu = &etudiants[no_etudiant - 1];
 
+    //affichage
+    printf("(%d) %s %d %d\n", no_etudiant, etu->nom_etu, etu->no_groupe, etu->nb_absences);
 
+    bool type_absence_affiche = false;
 
+    // Catégorie en attente justificatif
+    for (int i = 0; i < etu->nb_absences; i++) {
+        Absence* absence = &etu->absences[i];
+        if (absence->jour <= jour && absence->statut_excuse == A_FOURNIR) {
+            if (!type_absence_affiche) {
+                printf("- En attente justificatif\n");
+                type_absence_affiche = true;  // affiche la catégorie une seule fois
+            }
+            printf("[%d] %d/%s\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
+        }
+    }
 
+    type_absence_affiche = false;  // Réinitialiser pour la catégorie suivante
 
+    //Catégorie en attente de validation
+    for (int i = 0; i < etu->nb_absences; i++) {
+        Absence* absence = &etu->absences[i];
+        if (absence->jour <= jour && absence->statut_excuse == A_VALIDER) {
+            if (!type_absence_affiche) {
+                printf("- En attente validation\n");
+                type_absence_affiche = true;
+            }
+            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+        }
+    }
 
+    type_absence_affiche = false;
+
+    //Catégorie justifiées
+    for (int i = 0; i < etu->nb_absences; i++) {
+        Absence* absence = &etu->absences[i];
+        if (absence->jour <= jour && absence->statut_excuse == ACCEPTEE) {
+            if (!type_absence_affiche) {
+                printf("- Justifiees\n");
+                type_absence_affiche = true;
+            }
+            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+        }
+    }
+
+    type_absence_affiche = false;
+
+    // Catégorie non-justifiées
+    for (int i = 0; i < etu->nb_absences; i++) {
+        Absence* absence = &etu->absences[i];
+        if (absence->jour <= jour && absence->statut_excuse == REFUSEE) {
+            if (!type_absence_affiche) {
+                printf("- Non-justifiees\n");
+                type_absence_affiche = true;
+            }
+            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+        }
+    }
 }
-
 
 
 //----------Main------------//
@@ -427,12 +514,15 @@ int main() {
             validations(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
-            validation();
+           // validation();
+        }
+        else if (strcmp(input, "etudiant") == 0){ //---------*C7*-----------//
+            void situation_etudiant(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             break;
         }
-        else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
+        else {
             printf("Commande inconnue\n");
         }
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
