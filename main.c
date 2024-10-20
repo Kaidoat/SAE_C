@@ -1,3 +1,5 @@
+//Celthans
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +27,7 @@ typedef enum {
 } StatutExcuse;
 
 typedef struct {
+    int id_absence;
     unsigned int jour;
     int demi_journee;
     char excuse[EXCUSE_MAX];
@@ -47,7 +50,7 @@ typedef struct{
     int no_groupe;
     unsigned int jour;
     int demi_journee;
-   char excuse[EXCUSE_MAX];
+    char excuse[EXCUSE_MAX];
 
 }Validations;
 
@@ -116,7 +119,7 @@ int verif_absence(Etudiant etudiants[], int no_etudiant, int jour, int demi_jour
 
     for(int i =0;i<etudiants[no_etudiant].nb_absences;i++){
         if (etudiants[no_etudiant].absences[i].jour == jour && etudiants[no_etudiant].absences[i].demi_journee == demi_journee){
-            printf("Absence deja connue ");
+            printf("Absence deja connue \n");
             return 0;
         }
 
@@ -143,10 +146,6 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
         return;
     }
 
-    if (no_etudiant >= nb_etudiants) {
-        printf("Identifiant incorrect\n");
-        return;
-    }
 
     if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
         printf("Identifiant incorrect\n");
@@ -166,6 +165,7 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
     var_retour = verif_absence(etudiants,no_etudiant,jour, demi_journee);
     if (var_retour){
 
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].id_absence = (*Nb_absencesTotal);
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour = jour;
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
@@ -204,6 +204,23 @@ int savoir_nombres_absences(Etudiant etudiant, int jour) {
     return compte_absence;
 }
 
+void triEtudiants(Etudiant etudiants[], int nb_etudiants) {
+    for (int i = 0; i < nb_etudiants - 1; i++) {
+
+        for (int j = i + 1; j < nb_etudiants; j++) {
+
+            // Si le groupe de l'étudiant i est plus petit que celui de l'étudiant j (ordre décroissant)
+            // ou si les groupes sont égaux et le nom de l'étudiant i est plus grand que celui de l'étudiant j (ordre croissant)
+
+            if (etudiants[i].id > etudiants[j].id) {
+                // Échanger les deux étudiants
+                Etudiant temp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = temp;
+            }
+        }
+    }
+}
 
 
 //----------------------C3--------------//
@@ -224,6 +241,7 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
     }
 
 // Trier les étudiants par groupe (ordre décroissant) puis par nom (ordre croissant)
+
     for (int i = 0; i < nb_etudiants - 1; i++) {
 
         for (int j = i + 1; j < nb_etudiants; j++) {
@@ -233,7 +251,6 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
 
             if (etudiants[i].no_groupe < etudiants[j].no_groupe ||
                 (etudiants[i].no_groupe == etudiants[j].no_groupe && strcmp(etudiants[i].nom_etu, etudiants[j].nom_etu) < 0)) {
-
                 // Échanger les deux étudiants
                 Etudiant temp = etudiants[i];
                 etudiants[i] = etudiants[j];
@@ -243,6 +260,7 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
     }
 
 
+
     int taille = savoir_max_caractere(etudiants, nb_etudiants);
 
 
@@ -250,8 +268,11 @@ void liste_etudiants(Etudiant etudiants[], int nb_etudiants ) {
         int nb_absences_jusqu_a_jour = savoir_nombres_absences(etudiants[nb_etudiants - 1 - i], a.jour);
         // Utiliser i + 1 pour avoir les indices dans le bon ordre
         printf("(%d) %-*s %2d %d\n", etudiants[nb_etudiants - 1 - i].id, taille, etudiants[nb_etudiants - 1 - i].nom_etu,
-            etudiants[nb_etudiants - 1 - i].no_groupe, nb_absences_jusqu_a_jour);
+               etudiants[nb_etudiants - 1 - i].no_groupe, nb_absences_jusqu_a_jour);
     }
+
+    // Retrie le tableau dans l'ordre
+    triEtudiants(etudiants, nb_etudiants);
 }
 
 
@@ -275,8 +296,7 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants, int nb_absences_
 
     for (int i = 0; i < nb_etudiants; i++) {
         for (int j = 0; j < etudiants[i].nb_absences; j++) {
-            compteur_absence++;
-            if (compteur_absence == id_absence) {
+            if (etudiants[i].absences[j].id_absence + 1 == id_absence) {
                 etu = &etudiants[i];
                 absence = &etudiants[i].absences[j];
                 break;
@@ -311,40 +331,40 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants, int nb_absences_
     else {
         strcpy(absence->excuse, justificatif);
         absence->statut_excuse = REFUSEE;
-        printf("Justificatif enregistre en retard\n");
+        printf("Justificatif enregistre\n");
     }
 }
 
 //--------------------C5-----------------------------//
 void validations (Etudiant etudiants[], int nb_etudiants){
 
-        bool a_des_validations = false;
-        int nb_validations = 0;
-        Validations validations[LONGUEUR_MAX_ABSENCE];
+    bool a_des_validations = false;
+    int nb_validations = 0;
+    Validations validations[LONGUEUR_MAX_ABSENCE];
 
 
 
-        for(int i =0;i<nb_etudiants;i++){
-            for(int j=0;j<etudiants[i].nb_absences;j++){
-                Absence *absence= &etudiants[i].absences[j];
+    for(int i =0;i<nb_etudiants;i++){
+        for(int j=0;j<etudiants[i].nb_absences;j++){
+            Absence *absence= &etudiants[i].absences[j];
 
 
-                if (absence->statut_excuse ==A_VALIDER){
-                    a_des_validations = true;
+            if (absence->statut_excuse ==A_VALIDER){
+                a_des_validations = true;
 
-                    validations[nb_validations].id_absence =j+1;
-                    validations[nb_validations].id_etudiant = etudiants[i].id;
-                    strcpy(validations[nb_validations].nom_etu, etudiants[i].nom_etu);
-                    validations[nb_validations].no_groupe = etudiants[i].no_groupe;
-                    validations[nb_validations].jour = absence->jour;
-                    validations[nb_validations].demi_journee= absence->demi_journee;
-                    strcpy(validations[nb_validations].excuse, absence->excuse);
-                    nb_validations++;
-                }
-
+                validations[nb_validations].id_absence =absence->id_absence + 1;
+                validations[nb_validations].id_etudiant = etudiants[i].id;
+                strcpy(validations[nb_validations].nom_etu, etudiants[i].nom_etu);
+                validations[nb_validations].no_groupe = etudiants[i].no_groupe;
+                validations[nb_validations].jour = absence->jour;
+                validations[nb_validations].demi_journee= absence->demi_journee;
+                strcpy(validations[nb_validations].excuse, absence->excuse);
+                nb_validations++;
             }
 
         }
+
+    }
 
     if (!a_des_validations){
         printf("Aucune validation en attente\n ");
@@ -377,17 +397,24 @@ void validations (Etudiant etudiants[], int nb_etudiants){
 }
 
 //-----------------C6-----------------//
-//void validation(){
-//    if (strcmp(am_pm, "am") == 0) {
-//        demi_journee = AM;
-//    } else if (strcmp(am_pm, "pm") == 0) {
-//        demi_journee = PM;
+//void validation(Etudiant etudiants[], int nb_etudiants){
+//
+//    char ok_ko[MAX_INPUT];
+//    int valid;
+//
+//    scanf ("%d %s", etudiants->nb_absences, ok_ko );
+//    if (strcmp(ok_ko, "ok") == 0) {
+//        valid = OK;
+//    } else if (strcmp(ok_ko, "ko") == 0) {
+//        valid = KO;
 //    } else {
-//        printf("Demi-journee incorrecte \n");
+//        printf("Code incorrect \n");
 //        return;
 //    }
 //
-//
+//    if (nb_absence==0){
+//        printf("Identifiant incorrect");
+//    }
 //
 //
 //
@@ -489,7 +516,6 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
 //----------Main------------//
 int main() {
 
-    Etudiant etu;
     Etudiant etudiants[LIMITE];
     int nb_etudiants = 0;
     char input[LONGUEUR_MAX_COMMANDE+1];
@@ -513,11 +539,11 @@ int main() {
         else if (strcmp(input, "validations") == 0){ //----------*C5*---------//
             validations(etudiants, nb_etudiants);
         }
-        else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
-           // validation();
-        }
+//        else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
+//            // validation();
+//        }
         else if (strcmp(input, "etudiant") == 0){ //---------*C7*-----------//
-            void situation_etudiant(etudiants, nb_etudiants);
+          //  void situation_etudiant(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             break;

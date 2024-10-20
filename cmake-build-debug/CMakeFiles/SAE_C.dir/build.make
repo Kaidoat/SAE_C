@@ -52,10 +52,10 @@ RM = "C:\Program Files\JetBrains\CLion 2023.3.2\bin\cmake\win\x64\bin\cmake.exe"
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Celthans\CLionProjects\groscaca
+CMAKE_SOURCE_DIR = C:\Users\Celthans\CLionProjects\pipi
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/SAE_C.dir/depend.make
@@ -69,32 +69,32 @@ include CMakeFiles/SAE_C.dir/progress.make
 include CMakeFiles/SAE_C.dir/flags.make
 
 CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj: CMakeFiles/SAE_C.dir/flags.make
-CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj: C:/Users/Celthans/CLionProjects/groscaca/Brouillon_C1.c
+CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj: C:/Users/Celthans/CLionProjects/pipi/Brouillon_C1.c
 CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj: CMakeFiles/SAE_C.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj -MF CMakeFiles\SAE_C.dir\Brouillon_C1.c.obj.d -o CMakeFiles\SAE_C.dir\Brouillon_C1.c.obj -c C:\Users\Celthans\CLionProjects\groscaca\Brouillon_C1.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj -MF CMakeFiles\SAE_C.dir\Brouillon_C1.c.obj.d -o CMakeFiles\SAE_C.dir\Brouillon_C1.c.obj -c C:\Users\Celthans\CLionProjects\pipi\Brouillon_C1.c
 
 CMakeFiles/SAE_C.dir/Brouillon_C1.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/SAE_C.dir/Brouillon_C1.c.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Celthans\CLionProjects\groscaca\Brouillon_C1.c > CMakeFiles\SAE_C.dir\Brouillon_C1.c.i
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Celthans\CLionProjects\pipi\Brouillon_C1.c > CMakeFiles\SAE_C.dir\Brouillon_C1.c.i
 
 CMakeFiles/SAE_C.dir/Brouillon_C1.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/SAE_C.dir/Brouillon_C1.c.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Celthans\CLionProjects\groscaca\Brouillon_C1.c -o CMakeFiles\SAE_C.dir\Brouillon_C1.c.s
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Celthans\CLionProjects\pipi\Brouillon_C1.c -o CMakeFiles\SAE_C.dir\Brouillon_C1.c.s
 
 CMakeFiles/SAE_C.dir/main.c.obj: CMakeFiles/SAE_C.dir/flags.make
-CMakeFiles/SAE_C.dir/main.c.obj: C:/Users/Celthans/CLionProjects/groscaca/main.c
+CMakeFiles/SAE_C.dir/main.c.obj: C:/Users/Celthans/CLionProjects/pipi/main.c
 CMakeFiles/SAE_C.dir/main.c.obj: CMakeFiles/SAE_C.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/SAE_C.dir/main.c.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/SAE_C.dir/main.c.obj -MF CMakeFiles\SAE_C.dir\main.c.obj.d -o CMakeFiles\SAE_C.dir\main.c.obj -c C:\Users\Celthans\CLionProjects\groscaca\main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/SAE_C.dir/main.c.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/SAE_C.dir/main.c.obj -MF CMakeFiles\SAE_C.dir\main.c.obj.d -o CMakeFiles\SAE_C.dir\main.c.obj -c C:\Users\Celthans\CLionProjects\pipi\main.c
 
 CMakeFiles/SAE_C.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/SAE_C.dir/main.c.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Celthans\CLionProjects\groscaca\main.c > CMakeFiles\SAE_C.dir\main.c.i
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Celthans\CLionProjects\pipi\main.c > CMakeFiles\SAE_C.dir\main.c.i
 
 CMakeFiles/SAE_C.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/SAE_C.dir/main.c.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Celthans\CLionProjects\groscaca\main.c -o CMakeFiles\SAE_C.dir\main.c.s
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Celthans\CLionProjects\pipi\main.c -o CMakeFiles\SAE_C.dir\main.c.s
 
 # Object files for target SAE_C
 SAE_C_OBJECTS = \
@@ -110,7 +110,7 @@ SAE_C.exe: CMakeFiles/SAE_C.dir/build.make
 SAE_C.exe: CMakeFiles/SAE_C.dir/linkLibs.rsp
 SAE_C.exe: CMakeFiles/SAE_C.dir/objects1.rsp
 SAE_C.exe: CMakeFiles/SAE_C.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable SAE_C.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable SAE_C.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\SAE_C.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -122,6 +122,6 @@ CMakeFiles/SAE_C.dir/clean:
 .PHONY : CMakeFiles/SAE_C.dir/clean
 
 CMakeFiles/SAE_C.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Celthans\CLionProjects\groscaca C:\Users\Celthans\CLionProjects\groscaca C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug C:\Users\Celthans\CLionProjects\groscaca\cmake-build-debug\CMakeFiles\SAE_C.dir\DependInfo.cmake "--color=$(COLOR)"
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Celthans\CLionProjects\pipi C:\Users\Celthans\CLionProjects\pipi C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug C:\Users\Celthans\CLionProjects\pipi\cmake-build-debug\CMakeFiles\SAE_C.dir\DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/SAE_C.dir/depend
 
