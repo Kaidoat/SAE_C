@@ -18,6 +18,8 @@
 
 #define AM 0
 #define PM 1
+#define OK 1
+#define KO 0
 
 typedef enum {
     A_FOURNIR = 0,
@@ -397,31 +399,62 @@ void validations (Etudiant etudiants[], int nb_etudiants){
 }
 
 //-----------------C6-----------------//
-//void validation(Etudiant etudiants[], int nb_etudiants){
-//
-//    char ok_ko[MAX_INPUT];
-//    int valid;
-//
-//    scanf ("%d %s", etudiants->nb_absences, ok_ko );
-//    if (strcmp(ok_ko, "ok") == 0) {
-//        valid = OK;
-//    } else if (strcmp(ok_ko, "ko") == 0) {
-//        valid = KO;
-//    } else {
-//        printf("Code incorrect \n");
-//        return;
-//    }
-//
-//    if (nb_absence==0){
-//        printf("Identifiant incorrect");
-//    }
-//
-//
-//
-//
-//
-//
-//}
+void validation(Etudiant etudiants[], int nb_etudiants, int nb_absences_total){
+
+    char ok_ko[MAX_INPUT];
+    int valid;
+    int no_absence;
+    Absence *absence;
+    Etudiant *etu;
+
+
+    scanf ("%d %s", &no_absence, ok_ko );
+
+    if (no_absence < 1 || no_absence > nb_absences_total){
+        printf("Identifiant incorrect\n");
+        return;
+    }
+
+    for (int i = 0; i < nb_etudiants; i++) {
+        for (int j = 0; j < etudiants[i].nb_absences; j++) {
+            if (etudiants[i].absences[j].id_absence + 1 == no_absence) {
+                etu = &etudiants[i];
+                absence = &etudiants[i].absences[j];
+                break;
+            }
+        }
+    }
+    if (absence->statut_excuse != A_VALIDER && absence->statut_excuse != ACCEPTEE){
+        printf("Identifiant incorrect\n");
+        return;
+    }
+
+    if (absence->statut_excuse == ACCEPTEE){
+        printf("Validation deja connue\n");
+        return;
+    }
+
+    if (strcmp(ok_ko, "ok") == 0) {
+        valid = OK;
+    } else if (strcmp(ok_ko, "ko") == 0) {
+        valid = KO;
+    } else {
+        printf("Code incorrect \n");
+        return;
+    }
+
+
+        if (valid==OK){
+            absence->statut_excuse = ACCEPTEE;
+        }
+        else{
+            absence->statut_excuse = REFUSEE;
+        }
+        printf ("Validation enregistree \n");
+
+
+
+}
 
 
 
@@ -539,11 +572,11 @@ int main() {
         else if (strcmp(input, "validations") == 0){ //----------*C5*---------//
             validations(etudiants, nb_etudiants);
         }
-//        else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
-//            // validation();
-//        }
+        else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
+             validation(etudiants,nb_etudiants,nb_absences_total);
+        }
         else if (strcmp(input, "etudiant") == 0){ //---------*C7*-----------//
-          //  void situation_etudiant(etudiants, nb_etudiants);
+            //void situation_etudiant(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             break;
