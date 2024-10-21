@@ -457,7 +457,7 @@ void validation(Etudiant etudiants[], int nb_etudiants, int nb_absences_total){
 }
 
 
-
+//----------------C7---------------------//
 void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
 
     int no_etudiant;
