@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj"
-  "CMakeFiles/SAE_C.dir/Brouillon_C1.c.obj.d"
   "CMakeFiles/SAE_C.dir/main.c.obj"
   "CMakeFiles/SAE_C.dir/main.c.obj.d"
   "SAE_C.exe"

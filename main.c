@@ -6,21 +6,22 @@
 #include <stdbool.h>
 #pragma warning(disable:4996)
 
-#define MAX_INPUT 150
-#define LONGUEUR_MAX_COMMANDE 20
-#define LIMITE 100
-#define LONGUEUR_MAX_ETUDIANT 30
-#define JOUR_MAX 40
-#define LEN_AM_PM 3
-#define EXCUSE_MAX 80
-#define LONGUEUR_MAX_JUSTIF 51
-#define LONGUEUR_MAX_ABSENCE 100
 
-#define AM 0
-#define PM 1
-#define OK 1
-#define KO 0
+typedef enum{
+    MAX_INPUT=150,
+    LONGUEUR_MAX_COMMANDE=20,
+    LIMITE =100,
+ LONGUEUR_MAX_ETUDIANT =30,
+ JOUR_MAX =40,
+ EXCUSE_MAX =80,
+ LONGUEUR_MAX_JUSTIF =51,
+ LONGUEUR_MAX_ABSENCE =100,
 
+ AM =0,
+ PM =1,
+ OK =1,
+ KO =0
+};
 typedef enum {
     A_FOURNIR = 0,
     A_VALIDER,
@@ -546,6 +547,18 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
 }
 
 
+
+//------------C8-----------//
+
+void defaillants(Etudiant etudiants[], int nb_etudiants){
+    Absence a;
+    a.jour=0;
+    scanf("%d", &a.jour);
+
+
+}
+
+
 //----------Main------------//
 int main() {
 
@@ -576,12 +589,16 @@ int main() {
              validation(etudiants,nb_etudiants,nb_absences_total);
         }
         else if (strcmp(input, "etudiant") == 0){ //---------*C7*-----------//
-            //void situation_etudiant(etudiants, nb_etudiants);
+             situation_etudiant(etudiants, nb_etudiants);
+        }
+        else if (strcmp(input,"defaillants")==0){
+            defaillants(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "exit") == 0) { //---------*C4*----------//
             break;
         }
-        else {
+
+        else if (strcmp(input,"etudiants") !=0) {
             printf("Commande inconnue\n");
         }
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
