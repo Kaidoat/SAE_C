@@ -459,35 +459,33 @@ void validation(Etudiant etudiants[], int nb_etudiants, int nb_absences_total){
 
 
 //----------------C7---------------------//
-void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
+void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
 
     int no_etudiant;
     int jour;
 
+    // Lecture des entrées utilisateur
     scanf("%d %d", &no_etudiant, &jour);
-    // transforme le num etudiant en index du tableau
+
+    // Convertion index utilisateur en index tableau
     no_etudiant--;
+
+    // Vérification des limites de l'index et du jour
+    if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
+        printf("Identifiant incorrect\n");
+        return;
+    }
 
     if (jour < 1 || jour > JOUR_MAX) {
         printf("Jour incorrect\n");
         return;
     }
 
-    if (no_etudiant >= nb_etudiants) {
-        printf("Identifiant incorrect\n");
-        return;
-    }
+    // Accéder à l'étudiant
+    Etudiant* etu = &etudiants[no_etudiant];
 
-    if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
-        printf("Identifiant incorrect\n");
-        return;
-    }
-
-    //pour acceder à l'etudiant
-    Etudiant* etu = &etudiants[no_etudiant - 1];
-
-    //affichage
-    printf("(%d) %s %d %d\n", no_etudiant, etu->nom_etu, etu->no_groupe, etu->nb_absences);
+    // Afficher les informations de l'étudiant
+    printf("(%d) %s %d %d\n", no_etudiant + 1, etu->nom_etu, etu->no_groupe, etu->nb_absences);
 
     bool type_absence_affiche = false;
 
@@ -497,7 +495,7 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
         if (absence->jour <= jour && absence->statut_excuse == A_FOURNIR) {
             if (!type_absence_affiche) {
                 printf("- En attente justificatif\n");
-                type_absence_affiche = true;  // affiche la catégorie une seule fois
+                type_absence_affiche = true;  // Imprimer une seule fois
             }
             printf("[%d] %d/%s\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
         }
@@ -505,7 +503,7 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
 
     type_absence_affiche = false;  // Réinitialiser pour la catégorie suivante
 
-    //Catégorie en attente de validation
+    // Catégorie en attente de validation
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
         if (absence->jour <= jour && absence->statut_excuse == A_VALIDER) {
@@ -519,7 +517,7 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
 
     type_absence_affiche = false;
 
-    //Catégorie justifiées
+    // Catégorie justifiées
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
         if (absence->jour <= jour && absence->statut_excuse == ACCEPTEE) {
@@ -545,6 +543,7 @@ void situation_etudiant (Etudiant etudiants[], int nb_etudiants) {
         }
     }
 }
+
 
 
 

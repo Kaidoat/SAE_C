@@ -1,8 +1,8 @@
 Inscription enregistree (1)
 Inscription enregistree (2)
-Inscription enregistree (3)
-Inscription enregistree (4)
-Inscription enregistree (5)
-Nom incorrect
-Inscription enregistree (6)
-Nom incorrect
+Absence enregistree [1]
+Absence enregistree [2]
+Absence enregistree [3]
+Absence enregistree [1]
+Jour incorrect
+
