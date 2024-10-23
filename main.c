@@ -11,16 +11,16 @@ typedef enum{
     MAX_INPUT=150,
     LONGUEUR_MAX_COMMANDE=20,
     LIMITE =100,
- LONGUEUR_MAX_ETUDIANT =30,
- JOUR_MAX =40,
- EXCUSE_MAX =80,
- LONGUEUR_MAX_JUSTIF =51,
- LONGUEUR_MAX_ABSENCE =100,
+    LONGUEUR_MAX_ETUDIANT =30,
+    JOUR_MAX =40,
+    EXCUSE_MAX =80,
+    LONGUEUR_MAX_JUSTIF =51,
+    LONGUEUR_MAX_ABSENCE =100,
 
- AM =0,
- PM =1,
- OK =1,
- KO =0
+    AM =0,
+    PM =1,
+    OK =1,
+    KO =0
 };
 typedef enum {
     A_FOURNIR = 0,
@@ -180,7 +180,6 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
         (*Nb_absencesTotal)++;
         printf("Absence enregistree [%d]\n",*Nb_absencesTotal);
     }
-
 
 }
 
@@ -448,18 +447,44 @@ void validation(Etudiant etudiants[], int nb_etudiants, int nb_absences_total){
     }
 
 
-        if (valid==OK){
-            absence->statut_excuse = ACCEPTEE;
-        }
-        else{
-            absence->statut_excuse = REFUSEE;
-        }
-        printf ("Validation enregistree \n");
+    if (valid==OK){
+        absence->statut_excuse = ACCEPTEE;
+    }
+    else{
+        absence->statut_excuse = REFUSEE;
+    }
+    printf ("Validation enregistree \n");
 
 
 
 }
 
+void tri_absence(Etudiant* e) {
+    for (int i = 0; i < e->nb_absences; i++) {
+        for (int j = i + 1; j < e->nb_absences; j++) {
+            if(e->absences[i].jour > e->absences[j].jour) {
+                Absence temp = e->absences[i];
+                e->absences[i] = e->absences[j];
+                e->absences[j] = temp;
+            }
+            else if(e->absences[i].jour == e->absences[j].jour && e->absences[i].demi_journee > e->absences[j].demi_journee) {
+                Absence temp = e->absences[i];
+                e->absences[i] = e->absences[j];
+                e->absences[j] = temp;
+            }
+        }
+    }
+}
+
+int compteur_absence(Etudiant e, int jour) {
+    int cpt = 0;
+    for (int i = 0; i < e.nb_absences; i++) {
+        if(e.absences[i].jour <= jour) {
+            cpt++;
+        }
+    }
+    return cpt;
+}
 
 //----------------C7---------------------//
 void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
@@ -478,8 +503,8 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
         return;
     }
 
-    if (jour < 1 || jour > JOUR_MAX) {
-        printf("Jour incorrect\n");
+    if (jour < 1) {
+        printf("Date incorrecte\n");
         return;
     }
 
@@ -487,19 +512,21 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     Etudiant* etu = &etudiants[no_etudiant];
 
     // Afficher les informations de l'étudiant
-    printf("(%d) %s %d %d\n", no_etudiant + 1, etu->nom_etu, etu->no_groupe, etu->nb_absences);
+    printf("(%d) %s %d %d\n", etu->id, etu->nom_etu, etu->no_groupe, compteur_absence((*etu), jour));
 
     bool type_absence_affiche = false;
+
+    tri_absence(etu);
 
     // Catégorie en attente justificatif
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
-        if (absence->jour <= jour && ((absence->statut_excuse == A_FOURNIR && absence->jour + 3 >= jour) || ((absence->statut_excuse == ACCEPTEE || absence->statut_excuse == REFUSEE) && jour < absence->jour_justification))) {
+        if (absence->jour <= jour && ((absence->statut_excuse == A_FOURNIR && absence->jour + 3 >= jour) || ((absence->statut_excuse == ACCEPTEE || absence->statut_excuse == REFUSEE || absence->statut_excuse == A_VALIDER) && jour < absence->jour_justification))) {
             if (!type_absence_affiche) {
                 printf("- En attente justificatif\n");
                 type_absence_affiche = true;  // Imprimer une seule fois
             }
-            printf("[%d] %d/%s\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
+            printf("  [%d] %d/%s\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
         }
     }
 
@@ -513,7 +540,7 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
                 printf("- En attente validation\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("  [%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
         }
     }
 
@@ -527,7 +554,7 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
                 printf("- Justifiees\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("  [%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
         }
     }
 
@@ -536,12 +563,17 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     // Catégorie non-justifiées
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
-        if (absence->jour <= jour && absence->statut_excuse == REFUSEE || (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour)) {
+        if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )|| (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
             if (!type_absence_affiche) {
                 printf("- Non-justifiees\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("  [%d] %d/%s ", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
+            if (!(absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour)) {
+                printf("(%s)\n", absence->excuse);
+            }
+            else
+                printf(("\n"));
         }
     }
 }
@@ -587,10 +619,10 @@ int main() {
             validations(etudiants, nb_etudiants);
         }
         else if (strcmp(input, "validation") == 0){ //---------*C6*----------//
-             validation(etudiants,nb_etudiants,nb_absences_total);
+            validation(etudiants,nb_etudiants,nb_absences_total);
         }
         else if (strcmp(input, "etudiant") == 0){ //---------*C7*-----------//
-             situation_etudiant(etudiants, nb_etudiants);
+            situation_etudiant(etudiants, nb_etudiants);
         }
         else if (strcmp(input,"defaillants")==0){
             defaillants(etudiants, nb_etudiants);
