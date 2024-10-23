@@ -35,6 +35,7 @@ typedef struct {
     int demi_journee;
     char excuse[EXCUSE_MAX];
     StatutExcuse statut_excuse;
+    int jour_justification;
 } Absence;
 
 typedef struct {
@@ -173,6 +174,7 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].demi_journee = demi_journee;
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].excuse[0] = 0;
         etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].statut_excuse = A_FOURNIR;
+        etudiants[no_etudiant].absences[etudiants[no_etudiant].nb_absences].jour_justification = -1;
 
         etudiants[no_etudiant].nb_absences++;
         (*Nb_absencesTotal)++;
@@ -336,6 +338,7 @@ void depot_justificatif(Etudiant etudiants[], int nb_etudiants, int nb_absences_
         absence->statut_excuse = REFUSEE;
         printf("Justificatif enregistre\n");
     }
+    absence->jour_justification = jour;
 }
 
 //--------------------C5-----------------------------//
@@ -469,7 +472,6 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
 
     // Convertion index utilisateur en index tableau
     no_etudiant--;
-
     // Vérification des limites de l'index et du jour
     if (no_etudiant >= nb_etudiants || no_etudiant < 0) {
         printf("Identifiant incorrect\n");
@@ -492,12 +494,12 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     // Catégorie en attente justificatif
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
-        if (absence->jour <= jour && absence->statut_excuse == A_FOURNIR) {
+        if (absence->jour <= jour && ((absence->statut_excuse == A_FOURNIR && absence->jour + 3 >= jour) || ((absence->statut_excuse == ACCEPTEE || absence->statut_excuse == REFUSEE) && jour < absence->jour_justification))) {
             if (!type_absence_affiche) {
                 printf("- En attente justificatif\n");
                 type_absence_affiche = true;  // Imprimer une seule fois
             }
-            printf("[%d] %d/%s\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
+            printf("[%d] %d/%s\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm");
         }
     }
 
@@ -511,7 +513,7 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
                 printf("- En attente validation\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
         }
     }
 
@@ -525,7 +527,7 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
                 printf("- Justifiees\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
         }
     }
 
@@ -534,12 +536,12 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     // Catégorie non-justifiées
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
-        if (absence->jour <= jour && absence->statut_excuse == REFUSEE) {
+        if (absence->jour <= jour && absence->statut_excuse == REFUSEE || (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour)) {
             if (!type_absence_affiche) {
                 printf("- Non-justifiees\n");
                 type_absence_affiche = true;
             }
-            printf("[%d] %d/%s (%s)\n", i + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
+            printf("[%d] %d/%s (%s)\n", absence->id_absence + 1, absence->jour, absence->demi_journee == AM ? "am" : "pm", absence->excuse);
         }
     }
 }
