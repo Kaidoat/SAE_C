@@ -59,10 +59,6 @@ typedef struct{
 }Validations;
 
 
-
-
-
-
 //---------------C1--------------//
 
 int verifier_nom(Etudiant etudiants[], int nb_etudiants, char* nom_etu, int no_groupe) {
@@ -138,7 +134,7 @@ void absence(Etudiant etudiants[], int nb_etudiants, int*Nb_absencesTotal) {
     int no_etudiant = 0;
     int jour = 0;
     char am_pm[MAX_INPUT];
-    int demi_journee = 0;
+    int demi_journee =0;
     int var_retour;
 
     scanf("%d %d %s", &no_etudiant, &jour, am_pm);
@@ -578,15 +574,60 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     }
 }
 
+int compter_defaillant(Etudiant etu[], int nb_etu, int jour){
+    int cpt = 0;
+    for (int i = 0; i < nb_etu; ++i) {
+        int cpt_abs = 0;
+        for (int j = 0; j < etu[i].nb_absences; j++){
+            Absence* absence = &etu[i].absences[i];
+            if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )|| (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
+                cpt_abs++;
+            }
+        }
+        if(cpt_abs >= 5){
+            cpt++;
+        }
+    }
+    return 0;
 
+}
 
 
 //------------C8-----------//
 
 void defaillants(Etudiant etudiants[], int nb_etudiants){
-    Absence a;
-    a.jour=0;
-    scanf("%d", &a.jour);
+    int jour = 0;
+    scanf_s("%d", &jour);
+
+    if(jour < 1){
+        printf("Date incorrecte\n");
+        return;
+    }
+
+    int cpt_defaillant = compter_defaillant(etudiants, nb_etudiants, jour);
+    if(cpt_defaillant == 0){
+        printf("Aucun défaillant\n");
+        return;
+    }
+
+    for (int i = 0; i < nb_etudiants; ++i) {
+        int cpt_abs = 0;
+        for (int j = 0; j < etudiants[i].nb_absences; j++){
+            Absence* absence = &etudiants[i].absences[i];
+            if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )|| (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
+                cpt_abs++;
+            }
+            if(cpt_abs >= 5){
+                int nb_absences_jusqu_a_jour = savoir_nombres_absences(etudiants[nb_etudiants - 1 - i], absence->jour);
+                printf("(%d) %2d %d %d\n", etudiants[nb_etudiants - 1 - i].id, etudiants[nb_etudiants - 1 - i].nom_etu,
+                       etudiants[nb_etudiants - 1 - i].no_groupe, nb_absences_jusqu_a_jour);
+            }
+        }
+    }
+
+
+
+
 
 
 }
@@ -636,3 +677,4 @@ int main() {
         }
     } while (strcmp(input, "exit") != 0); //--------C0-----------//
 }
+
