@@ -517,7 +517,7 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     // Catégorie en attente justificatif
     for (int i = 0; i < etu->nb_absences; i++) {
         Absence* absence = &etu->absences[i];
-        if (absence->jour <= jour && ((absence->statut_excuse == A_FOURNIR && absence->jour + 3 >= jour) || ((absence->statut_excuse == ACCEPTEE || absence->statut_excuse == REFUSEE || absence->statut_excuse == A_VALIDER) && jour < absence->jour_justification))) {
+        if (absence->jour <= jour && (absence->jour + 3 >= jour && (absence->jour_justification > jour || !absence->statut_excuse == A_FOURNIR))) {
             if (!type_absence_affiche) {
                 printf("- En attente justificatif\n");
                 type_absence_affiche = true;  // Imprimer une seule fois
@@ -574,21 +574,23 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
     }
 }
 
-int compter_defaillant(Etudiant etu[], int nb_etu, int jour){
+int compter_defaillant(Etudiant etu[], int nb_etu, int jour, Etudiant tmp []){
     int cpt = 0;
     for (int i = 0; i < nb_etu; ++i) {
         int cpt_abs = 0;
         for (int j = 0; j < etu[i].nb_absences; j++){
-            Absence* absence = &etu[i].absences[i];
-            if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )|| (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
+            Absence* absence = &etu[i].absences[j];
+            if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )
+                                        || (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
                 cpt_abs++;
             }
         }
         if(cpt_abs >= 5){
+            tmp[cpt] = etu[i];
             cpt++;
         }
     }
-    return 0;
+    return cpt;
 
 }
 
@@ -604,30 +606,25 @@ void defaillants(Etudiant etudiants[], int nb_etudiants){
         return;
     }
 
-    int cpt_defaillant = compter_defaillant(etudiants, nb_etudiants, jour);
+    triEtudiants(etudiants, nb_etudiants);
+
+    Etudiant tmp[LIMITE];
+
+    int cpt_defaillant = compter_defaillant(etudiants, nb_etudiants, jour, tmp);
     if(cpt_defaillant == 0){
-        printf("Aucun défaillant\n");
+        printf("Aucun defaillant\n");
         return;
     }
 
-    for (int i = 0; i < nb_etudiants; ++i) {
-        int cpt_abs = 0;
-        for (int j = 0; j < etudiants[i].nb_absences; j++){
-            Absence* absence = &etudiants[i].absences[i];
-            if (absence->jour <= jour && ((absence->statut_excuse == REFUSEE && absence->jour_justification <= jour )|| (absence->statut_excuse == A_FOURNIR && absence->jour + 3 < jour))) {
-                cpt_abs++;
-            }
-            if(cpt_abs >= 5){
-                int nb_absences_jusqu_a_jour = savoir_nombres_absences(etudiants[nb_etudiants - 1 - i], absence->jour);
-                printf("(%d) %2d %d %d\n", etudiants[nb_etudiants - 1 - i].id, etudiants[nb_etudiants - 1 - i].nom_etu,
-                       etudiants[nb_etudiants - 1 - i].no_groupe, nb_absences_jusqu_a_jour);
-            }
-        }
+    for(int i =0; i< cpt_defaillant; i++){
+
+        int nb_absences_jusqu_a_jour = savoir_nombres_absences(tmp[i], jour);
+
+        // Utiliser i + 1 pour avoir les indices dans le bon ordre
+        printf("(%d) %2s %d %d \n", tmp[i].id, tmp[i].nom_etu,
+              tmp[i].no_groupe, nb_absences_jusqu_a_jour);
+
     }
-
-
-
-
 
 
 }
