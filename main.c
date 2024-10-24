@@ -581,17 +581,6 @@ void situation_etudiant(Etudiant etudiants[], int nb_etudiants) {
 
 
 
-//------------C8-----------//
-
-void defaillants(Etudiant etudiants[], int nb_etudiants){
-    Absence a;
-    a.jour=0;
-    scanf("%d", &a.jour);
-
-
-}
-
-
 //----------Main------------//
 int main() {
 
